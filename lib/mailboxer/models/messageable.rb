@@ -57,9 +57,11 @@ module Mailboxer
 
       #Sends a messages, starting a new conversation, with the messageable
       #as originator
-      def send_message(recipients, msg_body, subject, sanitize_text=true, attachment=nil, message_timestamp = Time.now)
+      def send_message(recipients, msg_body, subject, category=Mailboxer::Conversation.categories.values.first, church_id=nil, sanitize_text=true, attachment=nil, message_timestamp = Time.now)
         convo = Mailboxer::ConversationBuilder.new({
           :subject    => subject,
+          :category => category,
+          :church_id => church_id,
           :created_at => message_timestamp,
           :updated_at => message_timestamp
         }).build
