@@ -36,6 +36,9 @@ class Mailboxer::Conversation < ActiveRecord::Base
     participant(participant).merge(Mailboxer::Receipt.not_trash)
   }
 
+  scope :before, ->(id) {where("id < ?", id)}
+  scope :after, ->(id) {where("id > ?", id)}
+
   #Mark the conversation as read for one of the participants
   def mark_as_read(participant)
     return unless participant

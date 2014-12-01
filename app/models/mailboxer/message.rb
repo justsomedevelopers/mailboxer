@@ -10,6 +10,8 @@ class Mailboxer::Message < Mailboxer::Notification
   scope :conversation, lambda { |conversation|
     where(:conversation_id => conversation.id)
   }
+  scope :before, ->(id) {where("id < ?", id)}
+  scope :after, ->(id) {where("id > ?", id)}
 
   mount_uploader :attachment, AttachmentUploader
 
