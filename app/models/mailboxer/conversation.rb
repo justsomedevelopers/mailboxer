@@ -36,8 +36,9 @@ class Mailboxer::Conversation < ActiveRecord::Base
     participant(participant).merge(Mailboxer::Receipt.not_trash)
   }
 
-  scope :before, ->(before_time) {where("mailboxer_conversations.updated_at::timestamp(0) < ?::timestamp(0)", before_time )}
-  scope :after, ->(after_time) {where("mailboxer_conversations.updated_at::timestamp(0) > ?::timestamp(0)", after_time)}
+
+  scope :before, ->(before_time) { where("mailboxer_conversations.updated_at < TIMESTAMP WITH TIME ZONE ?", before_time )}
+  scope :after, ->(after_time) {where("mailboxer_conversations.updated_at > TIMESTAMP WITH TIME ZONE ?", after_time)}
 
   #Mark the conversation as read for one of the participants
   def mark_as_read(participant)
