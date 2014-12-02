@@ -189,8 +189,8 @@ class Mailboxer::Conversation < ActiveRecord::Base
     !opt_outs.unsubscriber(participant).any?
   end
 
-  def updated_at_in_utc
-    "#{updated_at.getutc.strftime('%Y-%m-%d %H:%M:%S')} UTC"
+  def updated_at_without_millisecons
+    updated_at.strftime('%Y-%m-%dT%H:%M:%S%z')
   end
 
   protected
