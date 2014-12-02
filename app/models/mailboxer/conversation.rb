@@ -37,8 +37,10 @@ class Mailboxer::Conversation < ActiveRecord::Base
   }
 
 
-  scope :before, ->(before_time) { where("mailboxer_conversations.updated_at < TIMESTAMP WITH TIME ZONE ?", before_time )}
-  scope :after, ->(after_time) {where("mailboxer_conversations.updated_at > TIMESTAMP WITH TIME ZONE ?", after_time)}
+  scope :before, ->(before_time) { where("DATE_TRUNC('second', mailboxer_conversations.updated_at) < TIMESTAMP WITHOUT TIME ZONE ?", before_time )}
+  scope :after, ->(after_time) do
+      where("DATE_TRUNC('second', mailboxer_conversations.updated_at) > TIMESTAMP WITHOUT TIME ZONE ?", after_time)
+  end
 
   #Mark the conversation as read for one of the participants
   def mark_as_read(participant)
@@ -185,6 +187,10 @@ class Mailboxer::Conversation < ActiveRecord::Base
   # tells if participant is opt in
   def has_subscriber?(participant)
     !opt_outs.unsubscriber(participant).any?
+  end
+
+  def updated_at_in_utc
+    "#{updated_at.getutc.strftime('%Y-%m-%d %H:%M:%S')} UTC"
   end
 
   protected
