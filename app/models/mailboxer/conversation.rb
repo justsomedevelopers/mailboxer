@@ -190,7 +190,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
   end
 
   def updated_at_without_millisecons
-    updated_at.strftime('%Y-%m-%dT%H:%M:%S%z')
+    updated_at.strftime('%Y-%m-%dT%H:%M:%S%:z')
   end
 
   protected
