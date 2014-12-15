@@ -5,6 +5,8 @@ class Mailboxer::Message < Mailboxer::Notification
   belongs_to :conversation, :class_name => "Mailboxer::Conversation", :validate => true, :autosave => true
   validates_presence_of :sender
 
+  serialize :picture_dimensions, Hash
+
   class_attribute :on_deliver_callback
   protected :on_deliver_callback
   scope :conversation, lambda { |conversation|
@@ -14,6 +16,10 @@ class Mailboxer::Message < Mailboxer::Notification
   scope :after, ->(id) {where("id > ?", id)}
 
   mount_uploader :attachment, AttachmentUploader
+
+  def picture_sizes(version = :original)
+    self.picture_dimensions[version] ? self.picture_dimensions[version] : {}
+  end
 
   class << self
     #Sets the on deliver callback method.
