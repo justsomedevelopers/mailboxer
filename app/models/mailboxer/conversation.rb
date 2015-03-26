@@ -6,6 +6,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
   has_many :opt_outs, :dependent => :destroy, :class_name => "Mailboxer::Conversation::OptOut"
   has_many :messages, :dependent => :destroy, :class_name => "Mailboxer::Message"
   has_many :receipts, :through => :messages,  :class_name => "Mailboxer::Receipt"
+  has_many :visible_messages, -> { where(hidden: false) }, :class_name => "Mailboxer::Message"
   belongs_to :church
   
   enum category: {single: 0, multiple: 5}
